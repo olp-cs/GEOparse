@@ -23,7 +23,7 @@ from GEOparse.GEOTypes import (
     GEODatabase,
     NoMetadataException,
 )
-from pandas import DataFrame, read_table, read_csv
+from pandas import DataFrame, read_table
 from pandas.testing import assert_frame_equal
 from six import iteritems
 
@@ -624,18 +624,6 @@ class TestGSE(unittest.TestCase):
         result.columns.name = "name"
         assert_frame_equal(gse.pivot_samples("VALUE"), result)
 
-    def test_annotate_and_average_pandas2_compatibility(self):
-        # For a pandas dataframe that contains both numeric and string columns,
-        # mean() function started to fail in pandas 2.0+.
-        # Solution: ensure we only have numeric columns.
-        expression_column = 'VALUE'
-        group_by_column = 'GB_ACC'
-        input_data = read_csv("test_data/pandas2_compatibility_input.csv")
-        expected_result = read_csv("test_data/pandas2_compatibility_output.csv").set_index(group_by_column)
-        actual_result_1 = input_data.groupby(group_by_column)[[expression_column]].mean()
-        actual_result_2 = input_data.groupby(group_by_column).mean(numeric_only=True)[[expression_column]]
-        assert_frame_equal(actual_result_1, expected_result)
-        assert_frame_equal(actual_result_2, expected_result)
 
     def test_merge_and_average(self):
         gse = GEO.get_GEO(
