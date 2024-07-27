@@ -624,7 +624,6 @@ class TestGSE(unittest.TestCase):
         result.columns.name = "name"
         assert_frame_equal(gse.pivot_samples("VALUE"), result)
 
-
     def test_merge_and_average(self):
         gse = GEO.get_GEO(
             filepath=join(download_geo, "soft_ex_family.txt"), geotype="GSE"
